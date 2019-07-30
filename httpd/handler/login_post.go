@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func LoginPost(user *signup.Repo) gin.HandlerFunc {
@@ -14,7 +15,9 @@ func LoginPost(user *signup.Repo) gin.HandlerFunc {
 
 		for _, v := range user.Users {
 			if username == v.Email {
-				if password == v.Password {
+				// password matching with hashed password
+				err := bcrypt.CompareHashAndPassword([]byte(v.Password), []byte(password))
+				if err == nil {
 					c.HTML(http.StatusOK, "index.gohtml", nil)
 				} else {
 					c.JSON(http.StatusNotFound, "password not matched")

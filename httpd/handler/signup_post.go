@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func RegistrationPost(user *signup.Repo) gin.HandlerFunc {
@@ -15,7 +16,10 @@ func RegistrationPost(user *signup.Repo) gin.HandlerFunc {
 		email := c.PostForm("email")
 		password := c.PostForm("password")
 
-		newuser := signup.User{firstname, lastname, email, password}
+		/* password hashing mechanism */
+		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
+
+		newuser := signup.User{firstname, lastname, email, string(hashedPassword)}
 		user.Register(newuser)
 		c.JSON(http.StatusOK, "user created")
 	}
