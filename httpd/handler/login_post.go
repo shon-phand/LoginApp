@@ -18,7 +18,7 @@ func LoginPost(user *signup.Repo) gin.HandlerFunc {
 				// password matching with hashed password
 				err := bcrypt.CompareHashAndPassword([]byte(v.Password), []byte(password))
 				if err == nil {
-					c.HTML(http.StatusOK, "index.gohtml", nil)
+					c.Redirect(302, "/homepage")
 				} else {
 					c.JSON(http.StatusNotFound, "password not matched")
 

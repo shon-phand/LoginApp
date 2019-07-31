@@ -21,7 +21,7 @@ func RegistrationPost(user *signup.Repo) gin.HandlerFunc {
 
 		newuser := signup.User{firstname, lastname, email, string(hashedPassword)}
 		user.Register(newuser)
-		c.JSON(http.StatusOK, "user created")
+		c.HTML(http.StatusOK, "login.gohtml", nil)
 	}
 
 }
