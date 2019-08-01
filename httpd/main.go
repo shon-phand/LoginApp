@@ -18,9 +18,10 @@ func main() {
 	r.GET("/signup", handler.RegistrationPage())
 	r.GET("/homepage", handler.Homepage())
 	r.GET("/repo", handler.AllRegisterUsers(user))
+	r.GET("/logout", handler.Logout())
 
 	r.POST("/signup", handler.RegistrationPost(user))
 	r.POST("/login", handler.LoginPost(user))
 
-	r.Run(":8080")
+	r.Run(":8089")
 }
