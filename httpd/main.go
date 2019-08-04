@@ -3,15 +3,20 @@ package main
 import (
 	"LoginApp/httpd/handler"
 	"LoginApp/platform/DB"
-	"LoginApp/platform/signup"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	user := signup.New()
-	db := DB.Start()
+	//ser := signup.New()
+	db, err := DB.Start()
+
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
+
 	defer db.Close()
 	r := gin.Default()
 	r.LoadHTMLGlob("/home/shon/Documents/Go_practise/LoginApp/resources/template/*")
@@ -23,7 +28,7 @@ func main() {
 	r.GET("/logout", handler.Logout())
 
 	r.POST("/signup", handler.RegistrationPost(db))
-	r.POST("/login", handler.LoginPost(user))
+	r.POST("/login", handler.LoginPost(db))
 
-	r.Run(":8181")
+	r.Run(":8182")
 }

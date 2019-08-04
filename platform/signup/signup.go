@@ -75,6 +75,6 @@ func GetAllRegisterdInDB(db *sql.DB) []Data {
 			fmt.Print(err.Error())
 		}
 	}
-	fmt.Println("data received : ", allusers.Users)
+	//fmt.Println("data received : ", allusers.Users)
 	return allusers.Users
 }

@@ -1,59 +1,44 @@
 package handler
 
 import (
-	"LoginApp/platform/signup"
+	"LoginApp/platform/login"
+	"database/sql"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func LoginPost(user *signup.Repo) gin.HandlerFunc {
+func LoginPost(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		sid, err := c.Cookie("session")
 		fmt.Println("err,sid:", err, sid)
 		if err != nil || sid == "" {
-			var msg string
-			var flag int
-			fmt.Println("err,sid::", err, sid)
+			//fmt.Println("err,sid::", err, sid)
 			username := c.PostForm("username")
 			password := c.PostForm("password")
-			fmt.Println("username and password", username, password)
-			for _, v := range user.Users {
 
-				fmt.Println("in for loop")
-				fmt.Println("before checking condition:", username, v.Email)
-				if username == v.Email {
-					fmt.Println("v.email", v.Email)
-					// password matching with hashed password
-					err = bcrypt.CompareHashAndPassword([]byte(v.Password), []byte(password))
-					fmt.Println("password err : ", err)
-					if err == nil {
-						c.SetCookie("session", "sidnumber", 600, "/", "", false, false)
-						fmt.Println("cookie set redirecting to homepage")
-						fmt.Println("before redirecting", username, password, v.Email, v.Password)
-						c.Redirect(303, "/homepage")
-						break
-					} else {
-						msg = "password not matched"
-						return
-					}
+			user, err := login.GetUserByUsername(username, db)
+
+			if err == nil {
+
+				err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+				if err == nil {
+
+					cookie := uuid.NewV4().String()
+					c.SetCookie("session", cookie, 600, "/", "", false, false)
+					c.Redirect(303, "/homepage")
 
 				} else {
-					msg = "username not found"
-					fmt.Println(msg)
+					c.JSON(400, "password not matched")
 				}
 
+			} else {
+				c.JSON(404, "username not found")
 			}
-			if flag == 1 {
-				c.JSON(404, msg)
-			} else if flag == 2 {
 
-			}
-		} else {
-			c.Redirect(302, "/homepage")
 		}
-
 	}
 }

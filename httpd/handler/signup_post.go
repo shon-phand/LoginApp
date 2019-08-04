@@ -20,9 +20,9 @@ func RegistrationPost(db *sql.DB) gin.HandlerFunc {
 
 		/* password hashing mechanism */
 		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
-		var ID = 3
+		// var ID = 3
 		var newuser signup.Data
-		newuser.ID = ID
+		// newuser.ID = ID
 		newuser.Firstname = firstname
 		newuser.Lastname = lastname
 		newuser.Email = email
