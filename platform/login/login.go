@@ -18,3 +18,15 @@ func GetUserByUsername(email string, db *sql.DB) (signup.Data, error) {
 	return data, err
 
 }
+
+func VerifyUsername(email string, db *sql.DB) bool {
+	var data signup.Data
+	row := db.QueryRow("select email from users where email= ?;", email)
+	fmt.Println(row)
+	err := row.Scan(&data.Email)
+	if err != nil {
+		fmt.Print("No details found", err.Error())
+		return false
+	}
+	return true
+}

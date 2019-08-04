@@ -4,6 +4,7 @@ import (
 	"LoginApp/platform/signup"
 	"database/sql"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -34,7 +35,14 @@ func RegistrationPost(db *sql.DB) gin.HandlerFunc {
 		if err == nil {
 			c.HTML(http.StatusOK, "login.gohtml", nil)
 		} else {
-			c.JSON(http.StatusNoContent, "registration failed")
+			var msg string
+			if strings.Contains(err.Error(), "Error 1062") {
+				msg = "email already exist,please try with another email !!!"
+				c.HTML(500, "registration.gohtml", msg)
+			} else {
+				msg = "sorry something went wrong"
+				c.HTML(500, "registration.gohtml", msg)
+			}
 		}
 		//newuser := signup.User{firstname, lastname, email, string(hashedPassword)}
 		//user.Register(newuser)

@@ -13,8 +13,9 @@ func Homepage() gin.HandlerFunc {
 		if err != nil || sid == "" {
 			c.Redirect(302, "/login")
 		} else {
-			sessionname, _ := c.Cookie("session")
-			c.HTML(http.StatusOK, "homepage.gohtml", sessionname)
+			//sessionname, _ := c.Cookie("session")
+			sid := c.Query("sid")
+			c.HTML(http.StatusOK, "homepage.gohtml", sid)
 		}
 	}
 }

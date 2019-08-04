@@ -26,9 +26,11 @@ func main() {
 	r.GET("/homepage", handler.Homepage())
 	r.GET("/repo", handler.AllRegisterUsers(db))
 	r.GET("/logout", handler.Logout())
-
+	r.GET("/resetpwd", handler.ResetPasswordPage())
+	r.POST("/verifyUsername", handler.VerifyUsername(db))
+	r.POST("/changepass", handler.PasswordReset(db))
 	r.POST("/signup", handler.RegistrationPost(db))
 	r.POST("/login", handler.LoginPost(db))
 
-	r.Run(":8182")
+	r.Run(":8080")
 }

@@ -3,7 +3,6 @@ package handler
 import (
 	"LoginApp/platform/login"
 	"database/sql"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -14,7 +13,7 @@ func LoginPost(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		sid, err := c.Cookie("session")
-		fmt.Println("err,sid:", err, sid)
+		//	fmt.Println("err,sid:", err, sid)
 		if err != nil || sid == "" {
 			//fmt.Println("err,sid::", err, sid)
 			username := c.PostForm("username")
@@ -28,11 +27,11 @@ func LoginPost(db *sql.DB) gin.HandlerFunc {
 				if err == nil {
 
 					cookie := uuid.NewV4().String()
-					c.SetCookie("session", cookie, 600, "/", "", false, false)
-					c.Redirect(303, "/homepage")
+					c.SetCookie("session", cookie, 300, "/", "", false, true)
+					c.Redirect(303, "/homepage?sid="+cookie)
 
 				} else {
-					c.JSON(400, "password not matched")
+					c.String(400, "password not matched")
 				}
 
 			} else {
