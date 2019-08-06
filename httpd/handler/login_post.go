@@ -2,6 +2,7 @@ package handler
 
 import (
 	"LoginApp/platform/login"
+	"LoginApp/platform/session"
 	"database/sql"
 
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,10 @@ func LoginPost(db *sql.DB) gin.HandlerFunc {
 
 					cookie := uuid.NewV4().String()
 					c.SetCookie("session", cookie, 300, "/", "", false, true)
+					details, _ := login.GetUserByUsername(username, db)
+
+					session.Add(cookie, details, db)
+
 					c.Redirect(303, "/homepage?sid="+cookie)
 
 				} else {

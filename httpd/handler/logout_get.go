@@ -1,18 +1,20 @@
 package handler
 
 import (
-	"fmt"
+	"LoginApp/platform/session"
+	"database/sql"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Logout() gin.HandlerFunc {
+func Logout(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		sid, _ := c.Cookie("session")
-		fmt.Println("sid = ", sid)
+		//fmt.Println("removing session in session table")
+		session.RemoveSession(sid, db)
+		//fmt.Println("session removed in session table")
+		// fmt.Println("sid = ", sid)
 		c.SetCookie("session", "", -1, "/", "", false, false)
-		sid2, _ := c.Cookie("session")
-		fmt.Println("sid2 = ", sid2)
 		c.Redirect(302, "/login")
 	}
 }

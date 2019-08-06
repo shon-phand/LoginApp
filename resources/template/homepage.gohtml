@@ -1,6 +1,13 @@
 <div>
 <h1>Welcome to Homepage</h1>
 <a href="/logout"><h3 align="right">Logout</h3></a>
-<h2>{{.}}</h2>
-
+{{range .}}
+<li>
+<h3>{{.ID}}</h3>
+<h3>{{.Email}}</h3>
+<h3>{{.FirstName}}</h3>
+<h3>{{.LastName}}</h3>
+<h3><img src={{.Avatar}}></h3>
+</li>
+{{end}}
 </div>
