@@ -42,7 +42,6 @@ func Homepage(db *sql.DB) gin.HandlerFunc {
 			if err != nil {
 				fmt.Println(err.Error())
 			}
-
 			c.HTML(http.StatusOK, "homepage.gohtml", response.Data)
 		}
 	}

@@ -29,7 +29,7 @@ func main() {
 	r.GET("/logout", handler.Logout(db))
 	r.GET("/resetpwd", handler.ResetPasswordPage())
 	r.POST("/verifyUsername", handler.VerifyUsername(db))
-	r.PUT("/changepass", handler.PasswordReset(db))
+	r.POST("/changepass", handler.PasswordReset(db))
 	r.POST("/signup", handler.RegistrationPost(db))
 	r.POST("/login", handler.LoginPost(db))
 	r.GET("/sessions", handler.ActiveSession(db))

@@ -1,6 +1,7 @@
 package signup
 
 import (
+	"LoginApp/platform/mail"
 	"database/sql"
 	"fmt"
 )
@@ -56,6 +57,8 @@ func RegisterInDB(newuser Data, db *sql.DB) error {
 	if err != nil {
 		fmt.Print(err.Error())
 	}
+	m := mail.NewMail(newuser.Email, "Registration successful")
+	m.Send("signupmail.gohtml", newuser.Firstname)
 	return err
 }
 
