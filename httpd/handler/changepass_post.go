@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"LoginApp/platform/mail"
 	"database/sql"
 	"fmt"
 	"net/http"
@@ -29,6 +30,13 @@ func PasswordReset(db *sql.DB) gin.HandlerFunc {
 				msg := "password reset successfully"
 				c.HTML(303, "login.gohtml", msg)
 			}
+			comm := mail.Comms{}
+			comm.Name = c1
+			comm.Username = c1
+			comm.Password = newpass
+			m := mail.NewMail(c1, "Password reset successful")
+			m.Send("resetmail.gohtml", comm)
+
 		} else {
 			c.String(400, "please verify user username")
 		}
