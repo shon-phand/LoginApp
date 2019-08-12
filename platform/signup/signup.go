@@ -1,7 +1,6 @@
 package signup
 
 import (
-	"LoginApp/platform/mail"
 	"database/sql"
 	"fmt"
 )
@@ -11,15 +10,15 @@ type Getter interface {
 }
 
 //for in memory storage
-type User struct {
-	First_name string
-	Last_name  string
-	Email      string
-	Password   string
-}
-type Repo struct {
-	Users []User
-}
+// type User struct {
+// 	First_name string
+// 	Last_name  string
+// 	Email      string
+// 	Password   string
+// }
+// type Repo struct {
+// 	Users []User
+// }
 
 //for database storage
 type Data struct {
@@ -36,14 +35,13 @@ type List struct {
 	Users []Data
 }
 
-func New() *Repo {
-	user1 := User{"shon", "phand", "shonphand@gmail.com", "$2a$14$z4dfE/2qNWf4aAbVnH9mY.yzj612LQrbiJpBpKjUj.UxGxFsbLMvy"}
-	user2 := User{"shon", "phand", "shon@gmail.com", "$2a$14$fhEV1KyAcE1mVy84.UmFpebJSiusUI5eD/3I5sgEPtKgUa5gAtmVi"}
-	return &Repo{Users: []User{user2, user1}}
-}
-func (r *Repo) Register(user User) {
-	r.Users = append(r.Users, user)
-}
+// func New() *Repo {
+
+// 	return &Repo{Users: []User{}}
+// }
+// func (r *Repo) Register(user User) {
+// 	r.Users = append(r.Users, user)
+// }
 
 func RegisterInDB(newuser Data, db *sql.DB) error {
 
@@ -57,8 +55,7 @@ func RegisterInDB(newuser Data, db *sql.DB) error {
 	if err != nil {
 		fmt.Print(err.Error())
 	}
-	m := mail.NewMail(newuser.Email, "Registration successful")
-	m.Send("signupmail.gohtml", newuser.Firstname)
+
 	return err
 }
 

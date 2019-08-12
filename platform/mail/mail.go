@@ -2,11 +2,25 @@ package mail
 
 import (
 	"bytes"
+	"crypto/rand"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/smtp"
+
+	uuid "github.com/satori/go.uuid"
 )
+
+var table = [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+
+type Comms struct {
+	Token    string
+	OTP      string
+	Name     string
+	Username string
+	Password string
+}
 
 type Mail struct {
 	from    string
@@ -65,4 +79,21 @@ func (m *Mail) Send(templateName string, items interface{}) {
 	} else {
 		log.Printf("Failed to send the email to %s\n", m.to)
 	}
+}
+
+func GenerateOTP(max int) string {
+	b := make([]byte, max)
+	n, err := io.ReadAtLeast(rand.Reader, b, max)
+	if n != max {
+		panic(err)
+	}
+	for i := 0; i < len(b); i++ {
+		b[i] = table[int(b[i])%len(table)]
+	}
+	return string(b)
+}
+
+func GenerateToken() string {
+	token := uuid.NewV4().String()
+	return token
 }
